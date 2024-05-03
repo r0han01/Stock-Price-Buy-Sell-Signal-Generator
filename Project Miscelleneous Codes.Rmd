@@ -1,0 +1,135 @@
+```{r}
+
+#library(dplyr)
+
+# Calculate percentage change between consecutive prices
+#percentage_change <- c(NA, diff(predicted_equal_to_ema_df$Price) / #lag(predicted_equal_to_ema_df$Price) * 100)
+
+# Add percentage change to the dataframe
+#predicted_equal_to_ema_df$Percentage_Change <- percentage_change[-length(percentage_change)]
+
+# Add Action column indicating Buy or Sell based on price change
+#predicted_equal_to_ema_df$Action <- ifelse(predicted_equal_to_ema_df$Percentage_Change > 0, "Buy", "Sell")
+
+# Shift the Action column up by one row
+#predicted_equal_to_ema_df$Action <- lag(predicted_equal_to_ema_df$Action)
+
+# Print the dataframe with Action column
+#cat("Predicted prices with Buy/Sell indication:\n")
+#print(predicted_equal_to_ema_df)
+```
+```{r}
+# Calculate mean of Percentage_Change for Buy and Sell actions separately
+#mean_buy <- mean(predicted_equal_to_ema_df$Percentage_Change[predicted_equal_to_ema_df$Action == "Buy"], na.rm = TRUE)
+#mean_sell <- mean(predicted_equal_to_ema_df$Percentage_Change[predicted_equal_to_ema_df$Action == "Sell"], na.rm = TRUE)
+
+# Print the results
+#cat("Mean percentage change for Buy:", -mean_buy, "\n")
+#cat("Mean percentage change for Sell:",mean_sell, "\n")
+```
+
+
+```{r}
+# Find the index of the highest percentage change
+#highest_index <- which.max(predicted_equal_to_ema_df$Percentage_Change)
+
+# Find the index of the lowest percentage change
+#lowest_index <- which.min(predicted_equal_to_ema_df$Percentage_Change)
+
+# Extract the dates corresponding to the highest and lowest percentage changes
+#highest_date <- predicted_equal_to_ema_df$Date[highest_index]
+#lowest_date <- predicted_equal_to_ema_df$Date[lowest_index]
+
+# Extract the highest and lowest percentage changes
+#highest_percentage <- predicted_equal_to_ema_df$Percentage_Change[highest_index]
+#lowest_percentage <- predicted_equal_to_ema_df$Percentage_Change[lowest_index]
+```
+
+```{r}
+# Find the index of the highest percentage change
+#highest_index <- which.max(predicted_equal_to_ema_df$Percentage_Change)
+
+# Find the index of the lowest percentage change
+#lowest_index <- which.min(predicted_equal_to_ema_df$Percentage_Change)
+
+# Extract the dates corresponding to the highest and lowest percentage changes
+#highest_date <- predicted_equal_to_ema_df$Date[highest_index]
+#lowest_date <- predicted_equal_to_ema_df$Date[lowest_index]
+
+# Extract the highest and lowest percentage changes
+#highest_percentage <- predicted_equal_to_ema_df$Percentage_Change[highest_index]
+#lowest_percentage <- predicted_equal_to_ema_df$Percentage_Change[lowest_index]
+```
+
+```{r}
+# Filter the dataframe to include only the rows with the highest percentage change
+#highest_df <- predicted_equal_to_ema_df[predicted_equal_to_ema_df$Percentage_Change == #highest_percentage, c("Date", "Percentage_Change")]
+
+# Filter the dataframe to include only the rows with the lowest percentage change
+#lowest_df <- predicted_equal_to_ema_df[predicted_equal_to_ema_df$Percentage_Change == #lowest_percentage, c("Date", "Percentage_Change")]
+
+# Print the highest and lowest percentage change with dates
+#cat("Highest Percentage Change with Date:\n")
+#print(highest_df)
+
+#cat("Lowest Percentage Change with Date:\n")
+#print(lowest_df)
+
+```
+```{r}
+# Remove the index of the highest percentage change
+#predicted_equal_to_ema_df_without_highest <- predicted_equal_to_ema_df[lowest_percentage, ]
+
+# Find the index of the second highest percentage change
+#second_highest_index <- which.max(predicted_equal_to_ema_df_without_highest$Percentage_Change)
+
+# Extract the date and percentage change of the second highest
+#second_highest_percentage <- #predicted_equal_to_ema_df_without_highest$Percentage_Change[second_highest_index]
+
+# Print the date and percentage change of the second highest
+#cat("Second Highest Percentage Change:", second_highest_percentage, "\n")
+```
+```{r}
+# Remove the index of the highest percentage change
+#predicted_equal_to_ema_df_without_highest <- predicted_equal_to_ema_df[-highest_index, ]
+
+# Find the index of the second highest percentage change
+#second_highest_index <- which.max(predicted_equal_to_ema_df_without_highest$Percentage_Change)
+
+# Extract the date and percentage change of the second highest
+#second_highest_percentage <- #predicted_equal_to_ema_df_without_highest$Percentage_Change[second_highest_index]
+
+# Print the date and percentage change of the second highest
+#cat("Second Highest Percentage Change:", second_highest_percentage, "\n")
+```
+
+
+
+
+
+
+```{r}
+#library(ggplot2)
+
+# Plot actual and predicted Close prices with 20-day EMA
+#p <- ggplot(data = test, aes(x = Date)) +
+  #geom_line(aes(y = KO.Close, color = "Actual")) +
+  #geom_line(aes(y = linear_predictions, color = "Predicted")) +
+  #geom_line(aes(y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  #ggtitle("Actual vs. Predicted Close Prices for The Coca-Cola Company with 20-day EMA") +
+  #xlab("Date") +
+  #ylab("Close Price") +
+  #scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  #theme(plot.title = element_text(hjust = 0.5))
+
+# Overlay points for Buy and Sell actions
+#p <- p + geom_point(data = predicted_equal_to_ema_df[predicted_equal_to_ema_df$Action == "Buy", ], aes(x = Date, y = Price), color = "green", size = 3, shape = 17) +
+         #geom_point(data = predicted_equal_to_ema_df[predicted_equal_to_ema_df$Action == "Sell", ], #aes(x = Date, y = Price), color = "red", size = 3, shape = 19)
+
+# Print the plot
+#print(p)
+```
+
+
+```
+

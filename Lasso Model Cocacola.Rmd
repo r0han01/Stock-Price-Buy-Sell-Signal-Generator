@@ -1,0 +1,765 @@
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for The Coca-Cola Company
+ticker <- "KO"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$KO.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Linear regression for KO.Low and KO.Volume
+lm_low_volume <- lm(KO.Close ~ KO.Low + KO.Volume, data = train)
+summary(lm_low_volume)
+
+# Linear regression for KO.High and KO.Volume
+lm_high_volume <- lm(KO.Close ~ KO.High + KO.Volume, data = train)
+summary(lm_high_volume)
+
+# Linear regression for KO.Open and KO.Volume
+lm_open_volume <- lm(KO.Close ~ KO.Open + KO.Volume, data = train)
+summary(lm_open_volume)
+
+```
+```{r}
+# Evaluate model performance for KO.Low and KO.Volume
+low_volume_predictions <- predict(lm_low_volume, test)
+low_volume_mse <- mean((low_volume_predictions - test$KO.Close)^2)
+low_volume_mae <- mean(abs(low_volume_predictions - test$KO.Close))
+low_volume_rsquared <- summary(lm_low_volume)$r.squared
+
+cat("Metrics for KO.Low and KO.Volume:\n")
+cat("Mean Squared Error (MSE):", low_volume_mse, "\n")
+cat("Mean Absolute Error (MAE):", low_volume_mae, "\n")
+cat("R-squared (R^2):", low_volume_rsquared, "\n\n")
+
+# Evaluate model performance for KO.High and KO.Volume
+high_volume_predictions <- predict(lm_high_volume, test)
+high_volume_mse <- mean((high_volume_predictions - test$KO.Close)^2)
+high_volume_mae <- mean(abs(high_volume_predictions - test$KO.Close))
+high_volume_rsquared <- summary(lm_high_volume)$r.squared
+
+cat("Metrics for KO.High and KO.Volume:\n")
+cat("Mean Squared Error (MSE):", high_volume_mse, "\n")
+cat("Mean Absolute Error (MAE):", high_volume_mae, "\n")
+cat("R-squared (R^2):", high_volume_rsquared, "\n\n")
+
+# Evaluate model performance for KO.Open and KO.Volume
+open_volume_predictions <- predict(lm_open_volume, test)
+open_volume_mse <- mean((open_volume_predictions - test$KO.Close)^2)
+open_volume_mae <- mean(abs(open_volume_predictions - test$KO.Close))
+open_volume_rsquared <- summary(lm_open_volume)$r.squared
+
+cat("Metrics for KO.Open and KO.Volume:\n")
+cat("Mean Squared Error (MSE):", open_volume_mse, "\n")
+cat("Mean Absolute Error (MAE):", open_volume_mae, "\n")
+cat("R-squared (R^2):", open_volume_rsquared, "\n")
+
+```
+```{r}
+# Load necessary library
+library(car)
+
+# Calculate VIF for KO.Low and KO.Volume
+vif_low_volume <- car::vif(lm_low_volume)
+cat("Variance Inflation Factor (VIF) for KO.Low and KO.Volume:\n")
+print(vif_low_volume)
+
+# Calculate VIF for KO.High and KO.Volume
+vif_high_volume <- car::vif(lm_high_volume)
+cat("\nVariance Inflation Factor (VIF) for KO.High and KO.Volume:\n")
+print(vif_high_volume)
+
+# Calculate VIF for KO.Open and KO.Volume
+vif_open_volume <- car::vif(lm_open_volume)
+cat("\nVariance Inflation Factor (VIF) for KO.Open and KO.Volume:\n")
+print(vif_open_volume)
+
+```
+```{r}
+# Linear regression for KO.Low, KO.Open, and KO.Volume
+lm_low_open_volume <- lm(KO.Close ~ KO.Low + KO.Open + KO.Volume, data = train)
+summary(lm_low_open_volume)
+
+# Linear regression for KO.High, KO.Open, and KO.Volume
+lm_high_open_volume <- lm(KO.Close ~ KO.High + KO.Open + KO.Volume, data = train)
+summary(lm_high_open_volume)
+
+# Linear regression for KO.High, KO.Low, and KO.Volume
+lm_high_low_volume <- lm(KO.Close ~ KO.High + KO.Low + KO.Volume, data = train)
+summary(lm_high_low_volume)
+
+```
+```{r}
+# Evaluate model performance for KO.Low, KO.Open, and KO.Volume
+low_open_volume_predictions <- predict(lm_low_open_volume, test)
+low_open_volume_mse <- mean((low_open_volume_predictions - test$KO.Close)^2)
+low_open_volume_mae <- mean(abs(low_open_volume_predictions - test$KO.Close))
+low_open_volume_rsquared <- summary(lm_low_open_volume)$r.squared
+
+cat("Metrics for KO.Low, KO.Open, and KO.Volume:\n")
+cat("Mean Squared Error (MSE):", low_open_volume_mse, "\n")
+cat("Mean Absolute Error (MAE):", low_open_volume_mae, "\n")
+cat("R-squared (R^2):", low_open_volume_rsquared, "\n\n")
+
+# Evaluate model performance for KO.High, KO.Open, and KO.Volume
+high_open_volume_predictions <- predict(lm_high_open_volume, test)
+high_open_volume_mse <- mean((high_open_volume_predictions - test$KO.Close)^2)
+high_open_volume_mae <- mean(abs(high_open_volume_predictions - test$KO.Close))
+high_open_volume_rsquared <- summary(lm_high_open_volume)$r.squared
+
+cat("Metrics for KO.High, KO.Open, and KO.Volume:\n")
+cat("Mean Squared Error (MSE):", high_open_volume_mse, "\n")
+cat("Mean Absolute Error (MAE):", high_open_volume_mae, "\n")
+cat("R-squared (R^2):", high_open_volume_rsquared, "\n\n")
+
+# Evaluate model performance for KO.High, KO.Low, and KO.Volume
+high_low_volume_predictions <- predict(lm_high_low_volume, test)
+high_low_volume_mse <- mean((high_low_volume_predictions - test$KO.Close)^2)
+high_low_volume_mae <- mean(abs(high_low_volume_predictions - test$KO.Close))
+high_low_volume_rsquared <- summary(lm_high_low_volume)$r.squared
+
+cat("Metrics for KO.High, KO.Low, and KO.Volume:\n")
+cat("Mean Squared Error (MSE):", high_low_volume_mse, "\n")
+cat("Mean Absolute Error (MAE):", high_low_volume_mae, "\n")
+cat("R-squared (R^2):", high_low_volume_rsquared, "\n")
+
+```
+```{r}
+# Load necessary library
+library(car)
+
+# Calculate VIF for KO.Low, KO.Open, and KO.Volume
+vif_low_open_volume <- car::vif(lm_low_open_volume)
+cat("Variance Inflation Factor (VIF) for KO.Low, KO.Open, and KO.Volume:\n")
+print(vif_low_open_volume)
+
+# Calculate VIF for KO.High, KO.Open, and KO.Volume
+vif_high_open_volume <- car::vif(lm_high_open_volume)
+cat("\nVariance Inflation Factor (VIF) for KO.High, KO.Open, and KO.Volume:\n")
+print(vif_high_open_volume)
+
+# Calculate VIF for KO.High, KO.Low, and KO.Volume
+vif_high_low_volume <- car::vif(lm_high_low_volume)
+cat("\nVariance Inflation Factor (VIF) for KO.High, KO.Low, and KO.Volume:\n")
+print(vif_high_low_volume)
+
+```
+```{r}
+# Load necessary libraries
+library(glmnet)
+
+# Prepare data matrix and response vector for each model
+X_low_volume <- model.matrix(KO.Close ~ KO.Low + KO.Volume, data = train)
+X_high_volume <- model.matrix(KO.Close ~ KO.High + KO.Volume, data = train)
+X_open_volume <- model.matrix(KO.Close ~ KO.Open + KO.Volume, data = train)
+y <- train$KO.Close
+
+# Fit Lasso regression models for each combination
+lasso_model_low_volume <- glmnet(X_low_volume, y, alpha = 1)  # alpha = 1 for Lasso
+lasso_model_high_volume <- glmnet(X_high_volume, y, alpha = 1)
+lasso_model_open_volume <- glmnet(X_open_volume, y, alpha = 1)
+
+# Choose lambda using cross-validation for each model
+cv_fit_low_volume <- cv.glmnet(X_low_volume, y, alpha = 1)  # alpha = 1 for Lasso
+cv_fit_high_volume <- cv.glmnet(X_high_volume, y, alpha = 1)
+cv_fit_open_volume <- cv.glmnet(X_open_volume, y, alpha = 1)
+
+# Lambda value with minimum cross-validated error for each model
+best_lambda_low_volume <- cv_fit_low_volume$lambda.min  
+best_lambda_high_volume <- cv_fit_high_volume$lambda.min
+best_lambda_open_volume <- cv_fit_open_volume$lambda.min  
+
+# Evaluate model performance for each model
+predictions_low_volume <- predict(lasso_model_low_volume, newx = X_low_volume, s = best_lambda_low_volume)
+predictions_high_volume <- predict(lasso_model_high_volume, newx = X_high_volume, s = best_lambda_high_volume)
+predictions_open_volume <- predict(lasso_model_open_volume, newx = X_open_volume, s = best_lambda_open_volume)
+
+mse_low_volume <- mean((predictions_low_volume - y)^2)  
+mae_low_volume <- mean(abs(predictions_low_volume - y))
+rsquared_low_volume <- cor(predictions_low_volume, y)^2  
+
+mse_high_volume <- mean((predictions_high_volume - y)^2)  
+mae_high_volume <- mean(abs(predictions_high_volume - y))
+rsquared_high_volume <- cor(predictions_high_volume, y)^2  
+
+mse_open_volume <- mean((predictions_open_volume - y)^2)  
+mae_open_volume <- mean(abs(predictions_open_volume - y))
+rsquared_open_volume <- cor(predictions_open_volume, y)^2  
+
+# Print evaluation metrics for each model
+cat("Metrics for KO.Low and KO.Volume Lasso Regression:\n")
+cat("Mean Squared Error (MSE):", mse_low_volume, "\n")
+cat("Mean Absolute Error (MAE):", mae_low_volume, "\n")
+cat("R-squared (R^2):", rsquared_low_volume, "\n\n")
+
+cat("Metrics for KO.High and KO.Volume Lasso Regression:\n")
+cat("Mean Squared Error (MSE):", mse_high_volume, "\n")
+cat("Mean Absolute Error (MAE):", mae_high_volume, "\n")
+cat("R-squared (R^2):", rsquared_high_volume, "\n\n")
+
+cat("Metrics for KO.Open and KO.Volume Lasso Regression:\n")
+cat("Mean Squared Error (MSE):", mse_open_volume, "\n")
+cat("Mean Absolute Error (MAE):", mae_open_volume, "\n")
+cat("R-squared (R^2):", rsquared_open_volume, "\n")
+
+```
+```{r}
+# Load necessary libraries
+library(glmnet)
+
+# Prepare data matrix and response vector for each model
+X_low_volume <- model.matrix(KO.Close ~ KO.Low + KO.Volume, data = train)
+X_high_volume <- model.matrix(KO.Close ~ KO.High + KO.Volume, data = train)
+X_open_volume <- model.matrix(KO.Close ~ KO.Open + KO.Volume, data = train)
+y <- train$KO.Close
+
+# Fit Ridge regression models for each combination
+ridge_model_low_volume <- glmnet(X_low_volume, y, alpha = 0)  # alpha = 0 for Ridge
+ridge_model_high_volume <- glmnet(X_high_volume, y, alpha = 0)
+ridge_model_open_volume <- glmnet(X_open_volume, y, alpha = 0)
+
+# Choose lambda using cross-validation for each model
+cv_fit_low_volume <- cv.glmnet(X_low_volume, y, alpha = 0)  # alpha = 0 for Ridge
+cv_fit_high_volume <- cv.glmnet(X_high_volume, y, alpha = 0)
+cv_fit_open_volume <- cv.glmnet(X_open_volume, y, alpha = 0)
+
+# Lambda value with minimum cross-validated error for each model
+best_lambda_low_volume <- cv_fit_low_volume$lambda.min  
+best_lambda_high_volume <- cv_fit_high_volume$lambda.min
+best_lambda_open_volume <- cv_fit_open_volume$lambda.min  
+
+# Evaluate model performance for each model
+predictions_low_volume <- predict(ridge_model_low_volume, newx = X_low_volume, s = best_lambda_low_volume)
+predictions_high_volume <- predict(ridge_model_high_volume, newx = X_high_volume, s = best_lambda_high_volume)
+predictions_open_volume <- predict(ridge_model_open_volume, newx = X_open_volume, s = best_lambda_open_volume)
+
+mse_low_volume <- mean((predictions_low_volume - y)^2)  
+mae_low_volume <- mean(abs(predictions_low_volume - y))
+rsquared_low_volume <- cor(predictions_low_volume, y)^2  
+
+mse_high_volume <- mean((predictions_high_volume - y)^2)  
+mae_high_volume <- mean(abs(predictions_high_volume - y))
+rsquared_high_volume <- cor(predictions_high_volume, y)^2  
+
+mse_open_volume <- mean((predictions_open_volume - y)^2)  
+mae_open_volume <- mean(abs(predictions_open_volume - y))
+rsquared_open_volume <- cor(predictions_open_volume, y)^2  
+
+# Print evaluation metrics for each model
+cat("Metrics for KO.Low and KO.Volume Ridge Regression:\n")
+cat("Mean Squared Error (MSE):", mse_low_volume, "\n")
+cat("Mean Absolute Error (MAE):", mae_low_volume, "\n")
+cat("R-squared (R^2):", rsquared_low_volume, "\n\n")
+
+cat("Metrics for KO.High and KO.Volume Ridge Regression:\n")
+cat("Mean Squared Error (MSE):", mse_high_volume, "\n")
+cat("Mean Absolute Error (MAE):", mae_high_volume, "\n")
+cat("R-squared (R^2):", rsquared_high_volume, "\n\n")
+
+cat("Metrics for KO.Open and KO.Volume Ridge Regression:\n")
+cat("Mean Squared Error (MSE):", mse_open_volume, "\n")
+cat("Mean Absolute Error (MAE):", mae_open_volume, "\n")
+cat("R-squared (R^2):", rsquared_open_volume, "\n")
+
+```
+```{r}
+# Prepare data matrix and response vector for KO.Low and KO.Volume
+X_low_volume <- model.matrix(KO.Close ~ KO.Low + KO.Volume, data = train)
+y <- train$KO.Close
+
+# Fit Lasso regression model for KO.Low and KO.Volume
+lasso_model_low_volume <- glmnet(X_low_volume, y, alpha = 1)  # alpha = 1 for Lasso
+
+# Choose lambda using cross-validation
+cv_fit_low_volume <- cv.glmnet(X_low_volume, y, alpha = 1)  # alpha = 1 for Lasso
+best_lambda_low_volume <- cv_fit_low_volume$lambda.min  # Lambda value with minimum cross-validated error
+
+# Evaluate model performance using the selected lambda
+lasso_predictions_low_volume <- predict(lasso_model_low_volume, newx = X_low_volume, s = best_lambda_low_volume)  # Predictions
+mse_low_volume <- cv_fit_low_volume$cvm[cv_fit_low_volume$lambda == best_lambda_low_volume]  # Mean Squared Error
+mae_low_volume <- mean(abs(lasso_predictions_low_volume - y))  # Mean Absolute Error
+rsquared_low_volume <- cor(lasso_predictions_low_volume, y)^2  # R-squared
+
+# Print evaluation metrics
+cat("Mean Squared Error (MSE) for KO.Low and KO.Volume Lasso Regression:", mse_low_volume, "\n")
+cat("Mean Absolute Error (MAE) for KO.Low and KO.Volume Lasso Regression:", mae_low_volume, "\n")
+cat("R-squared (R^2) for KO.Low and KO.Volume Lasso Regression:", rsquared_low_volume, "\n")
+
+```
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+library(glmnet)
+
+# Set the ticker symbol for The Coca-Cola Company
+ticker <- "KO"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$KO.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Prepare data matrix and response vector
+X_train <- model.matrix(KO.Close ~ KO.Low + KO.Volume, data = train)
+y_train <- train$KO.Close
+
+# Fit Lasso regression model
+lasso_model <- glmnet(X_train, y_train, alpha = 1)  # alpha = 1 for Lasso
+
+# Choose lambda using cross-validation
+cv_fit <- cv.glmnet(X_train, y_train, alpha = 1)  # alpha = 1 for Lasso
+best_lambda <- cv_fit$lambda.min  # Lambda value with minimum cross-validated error
+
+# Make predictions
+lasso_predictions <- predict(lasso_model, newx = model.matrix(KO.Close ~ KO.Low + KO.Volume, data = test), s = best_lambda)
+
+# Evaluate model performance
+mse <- mean((lasso_predictions - test$KO.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(lasso_predictions - test$KO.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$KO.Close - mean(test$KO.Close))^2)
+ss_residual <- sum((test$KO.Close - lasso_predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of Lasso regression model
+print(lasso_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = KO.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = lasso_predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for The Coca-Cola Company with 20-day EMA (Lasso Regression)") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+```{r}
+# Estimated coefficients from the Lasso regression model
+lasso_coef <- coef(lasso_model, s = best_lambda)
+print(lasso_coef)
+
+```
+
+
+```{r}
+# Load necessary libraries
+library(glmnet)
+
+# Prepare data matrix and response vector for low volume model
+X_low_volume <- model.matrix(KO.Close ~ KO.Low + KO.Volume, data = train)
+y <- train$KO.Close
+
+# Fit Lasso regression model for low volume
+lasso_model_low_volume <- glmnet(X_low_volume, y, alpha = 1)  # alpha = 1 for Lasso
+
+# Choose lambda using cross-validation for low volume model
+cv_fit_low_volume <- cv.glmnet(X_low_volume, y, alpha = 1)  # alpha = 1 for Lasso
+
+# Lambda value with minimum cross-validated error for low volume model
+best_lambda_low_volume <- cv_fit_low_volume$lambda.min  
+
+# Evaluate model performance for low volume model
+predictions_low_volume <- predict(lasso_model_low_volume, newx = X_low_volume, s = best_lambda_low_volume)
+
+mse_low_volume <- mean((predictions_low_volume - y)^2)  
+mae_low_volume <- mean(abs(predictions_low_volume - y))
+rsquared_low_volume <- cor(predictions_low_volume, y)^2  
+
+# Print evaluation metrics for low volume model
+cat("Metrics for KO.Low and KO.Volume Lasso Regression:\n")
+cat("Mean Squared Error (MSE):", mse_low_volume, "\n")
+cat("Mean Absolute Error (MAE):", mae_low_volume, "\n")
+cat("R-squared (R^2):", rsquared_low_volume, "\n")
+
+```
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+library(glmnet)
+
+# Set the ticker symbol for The Coca-Cola Company
+ticker <- "KO"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$KO.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Prepare data matrix and response vector
+X_train <- model.matrix(KO.Close ~ KO.High + KO.Volume, data = train)
+y_train <- train$KO.Close
+
+# Fit Lasso regression model
+lasso_model <- glmnet(X_train, y_train, alpha = 1)  # alpha = 1 for Lasso
+
+# Choose lambda using cross-validation
+cv_fit <- cv.glmnet(X_train, y_train, alpha = 1)  # alpha = 1 for Lasso
+best_lambda <- cv_fit$lambda.min  # Lambda value with minimum cross-validated error
+
+# Make predictions
+lasso_predictions <- predict(lasso_model, newx = model.matrix(KO.Close ~ KO.High + KO.Volume, data = test), s = best_lambda)
+
+# Evaluate model performance
+mse <- mean((lasso_predictions - test$KO.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(lasso_predictions - test$KO.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$KO.Close - mean(test$KO.Close))^2)
+ss_residual <- sum((test$KO.Close - lasso_predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of Lasso regression model
+print(lasso_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = KO.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = lasso_predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for The Coca-Cola Company with 20-day EMA (Lasso Regression)") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+```
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+library(glmnet)
+
+# Set the ticker symbol for The Coca-Cola Company
+ticker <- "KO"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$KO.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Prepare data matrix and response vector
+X_train <- model.matrix(KO.Close ~ KO.Open + KO.Volume, data = train)
+y_train <- train$KO.Close
+
+# Fit Lasso regression model
+lasso_model <- glmnet(X_train, y_train, alpha = 1)  # alpha = 1 for Lasso
+
+# Choose lambda using cross-validation
+cv_fit <- cv.glmnet(X_train, y_train, alpha = 1)  # alpha = 1 for Lasso
+best_lambda <- cv_fit$lambda.min  # Lambda value with minimum cross-validated error
+
+# Make predictions
+lasso_predictions <- predict(lasso_model, newx = model.matrix(KO.Close ~ KO.Open + KO.Volume, data = test), s = best_lambda)
+
+# Evaluate model performance
+mse <- mean((lasso_predictions - test$KO.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(lasso_predictions - test$KO.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$KO.Close - mean(test$KO.Close))^2)
+ss_residual <- sum((test$KO.Close - lasso_predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of Lasso regression model
+print(lasso_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = KO.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = lasso_predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for The Coca-Cola Company with 20-day EMA (Lasso Regression)") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+library(glmnet)
+
+# Set the ticker symbol for The Coca-Cola Company
+ticker <- "KO"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$KO.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Prepare data matrix and response vector
+X_train <- model.matrix(KO.Close ~ KO.High + KO.Volume, data = train)
+y_train <- train$KO.Close
+
+# Fit Ridge regression model
+ridge_model <- glmnet(X_train, y_train, alpha = 0)  # alpha = 0 for Ridge
+
+# Choose lambda using cross-validation
+cv_fit <- cv.glmnet(X_train, y_train, alpha = 0)  # alpha = 0 for Ridge
+best_lambda <- cv_fit$lambda.min  # Lambda value with minimum cross-validated error
+
+# Make predictions
+ridge_predictions <- predict(ridge_model, newx = model.matrix(KO.Close ~ KO.High + KO.Volume, data = test), s = best_lambda)
+
+# Evaluate model performance
+mse <- mean((ridge_predictions - test$KO.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(ridge_predictions - test$KO.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$KO.Close - mean(test$KO.Close))^2)
+ss_residual <- sum((test$KO.Close - ridge_predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of Ridge regression model
+print(ridge_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = KO.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = ridge_predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for The Coca-Cola Company with 20-day EMA (Ridge Regression)") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+library(glmnet)
+
+# Set the ticker symbol for The Coca-Cola Company
+ticker <- "KO"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$KO.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Prepare data matrix and response vector
+X_train <- model.matrix(KO.Close ~ KO.Open + KO.Volume, data = train)
+y_train <- train$KO.Close
+
+# Fit Ridge regression model
+ridge_model <- glmnet(X_train, y_train, alpha = 0)  # alpha = 0 for Ridge
+
+# Choose lambda using cross-validation
+cv_fit <- cv.glmnet(X_train, y_train, alpha = 0)  # alpha = 0 for Ridge
+best_lambda <- cv_fit$lambda.min  # Lambda value with minimum cross-validated error
+
+# Make predictions
+ridge_predictions <- predict(ridge_model, newx = model.matrix(KO.Close ~ KO.Open + KO.Volume, data = test), s = best_lambda)
+
+# Evaluate model performance
+mse <- mean((ridge_predictions - test$KO.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(ridge_predictions - test$KO.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$KO.Close - mean(test$KO.Close))^2)
+ss_residual <- sum((test$KO.Close - ridge_predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of Ridge regression model
+print(ridge_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = KO.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = ridge_predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for The Coca-Cola Company with 20-day EMA (Ridge Regression)") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+library(glmnet)
+
+# Set the ticker symbol for The Coca-Cola Company
+ticker <- "KO"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$KO.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Prepare data matrix and response vector
+X_train <- model.matrix(KO.Close ~ KO.Low + KO.Volume, data = train)
+y_train <- train$KO.Close
+
+# Fit Ridge regression model
+ridge_model <- glmnet(X_train, y_train, alpha = 0)  # alpha = 0 for Ridge
+
+# Choose lambda using cross-validation
+cv_fit <- cv.glmnet(X_train, y_train, alpha = 0)  # alpha = 0 for Ridge
+best_lambda <- cv_fit$lambda.min  # Lambda value with minimum cross-validated error
+
+# Make predictions
+ridge_predictions <- predict(ridge_model, newx = model.matrix(KO.Close ~ KO.Low + KO.Volume, data = test), s = best_lambda)
+
+# Evaluate model performance
+mse <- mean((ridge_predictions - test$KO.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(ridge_predictions - test$KO.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$KO.Close - mean(test$KO.Close))^2)
+ss_residual <- sum((test$KO.Close - ridge_predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of Ridge regression model
+print(ridge_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = KO.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = ridge_predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for The Coca-Cola Company with 20-day EMA (Ridge Regression)") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+```{r}
+# Estimated coefficients from the Ridge regression model
+ridge_coef <- coef(ridge_model, s = best_lambda)
+print(ridge_coef)
+
+```
+

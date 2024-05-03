@@ -1,0 +1,962 @@
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for NVIDIA
+ticker <- "NVDA"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$NVDA.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(NVDA.Close ~ NVDA.Open + NVDA.High + NVDA.Low + NVDA.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$NVDA.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$NVDA.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$NVDA.Close - mean(test$NVDA.Close))^2)
+ss_residual <- sum((test$NVDA.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = NVDA.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for NVIDIA with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+
+
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for Meta Platforms
+ticker <- "META"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$META.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(META.Close ~ META.Open + META.High + META.Low + META.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$META.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$META.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$META.Close - mean(test$META.Close))^2)
+ss_residual <- sum((test$META.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = META.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for Meta Platforms with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for Tesla
+ticker <- "TSLA"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$TSLA.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(TSLA.Close ~ TSLA.Open + TSLA.High + TSLA.Low + TSLA.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$TSLA.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$TSLA.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$TSLA.Close - mean(test$TSLA.Close))^2)
+ss_residual <- sum((test$TSLA.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = TSLA.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for Tesla with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for Alphabet Inc.
+ticker <- "GOOGL"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$GOOGL.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(GOOGL.Close ~ GOOGL.Open + GOOGL.High + GOOGL.Low + GOOGL.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$GOOGL.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$GOOGL.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$GOOGL.Close - mean(test$GOOGL.Close))^2)
+ss_residual <- sum((test$GOOGL.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = GOOGL.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for Alphabet Inc. with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for Exxon Mobil Corporation
+ticker <- "XOM"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$XOM.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(XOM.Close ~ XOM.Open + XOM.High + XOM.Low + XOM.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$XOM.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$XOM.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$XOM.Close - mean(test$XOM.Close))^2)
+ss_residual <- sum((test$XOM.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = XOM.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for Exxon Mobil Corporation with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for JPMorgan Chase & Co.
+ticker <- "JPM"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$JPM.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(JPM.Close ~ JPM.Open + JPM.High + JPM.Low + JPM.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$JPM.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$JPM.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$JPM.Close - mean(test$JPM.Close))^2)
+ss_residual <- sum((test$JPM.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = JPM.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for JPMorgan Chase & Co. with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for Microsoft Corporation
+ticker <- "MSFT"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$MSFT.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(MSFT.Close ~ MSFT.Open + MSFT.High + MSFT.Low + MSFT.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$MSFT.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$MSFT.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$MSFT.Close - mean(test$MSFT.Close))^2)
+ss_residual <- sum((test$MSFT.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = MSFT.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for Microsoft Corporation with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for UnitedHealth Group Incorporated
+ticker <- "UNH"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$UNH.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(UNH.Close ~ UNH.Open + UNH.High + UNH.Low + UNH.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$UNH.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$UNH.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$UNH.Close - mean(test$UNH.Close))^2)
+ss_residual <- sum((test$UNH.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = UNH.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for UnitedHealth Group Incorporated with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for Visa Inc.
+ticker <- "V"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$V.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(V.Close ~ V.Open + V.High + V.Low + V.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$V.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$V.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$V.Close - mean(test$V.Close))^2)
+ss_residual <- sum((test$V.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = V.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for Visa Inc. with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for The Home Depot, Inc.
+ticker <- "HD"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$HD.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(HD.Close ~ HD.Open + HD.High + HD.Low + HD.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$HD.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$HD.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$HD.Close - mean(test$HD.Close))^2)
+ss_residual <- sum((test$HD.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = HD.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for The Home Depot, Inc. with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+
+
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for The Coca-Cola Company
+ticker <- "KO"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$KO.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(KO.Close ~ KO.Open + KO.High + KO.Low + KO.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$KO.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$KO.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$KO.Close - mean(test$KO.Close))^2)
+ss_residual <- sum((test$KO.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = KO.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for The Coca-Cola Company with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+```{r}
+# Load necessary libraries
+library(ggplot2)
+
+# Create box plots for each column along with the "Close" variable
+boxplot_data <- train[, c("KO.Open", "KO.High", "KO.Low", "KO.Volume", "KO.Close")]
+boxplot_data <- stack(boxplot_data)
+
+ggplot(boxplot_data, aes(x = ind, y = values)) +
+  geom_boxplot() +
+  facet_wrap(~ ind, scales = "free_y") +
+  labs(title = "Box plots for Each Column and Close Variable",
+       x = "Variables",
+       y = "Values")
+
+```
+```{r}
+# Boxplot of KO.Close vs. KO.Open
+ggplot(train, aes(x = factor(1), y = KO.Close)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of KO.Close vs. KO.Open",
+       x = "KO.Open",
+       y = "KO.Close")
+
+# Boxplot of KO.Close vs. KO.High
+ggplot(train, aes(x = factor(1), y = KO.Close)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of KO.Close vs. KO.High",
+       x = "KO.High",
+       y = "KO.Close")
+
+# Boxplot of KO.Close vs. KO.Low
+ggplot(train, aes(x = factor(1), y = KO.Close)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of KO.Close vs. KO.Low",
+       x = "KO.Low",
+       y = "KO.Close")
+
+# Boxplot of KO.Close vs. KO.Volume
+ggplot(train, aes(x = factor(1), y = KO.Close)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of KO.Close vs. KO.Volume",
+       x = "KO.Volume",
+       y = "KO.Close")
+
+```
+
+
+
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for Mastercard Incorporated
+ticker <- "MA"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$MA.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(MA.Close ~ MA.Open + MA.High + MA.Low + MA.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$MA.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$MA.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$MA.Close - mean(test$MA.Close))^2)
+ss_residual <- sum((test$MA.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = MA.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for Mastercard Incorporated with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for Super Micro Computer, Inc.
+ticker <- "SMCI"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$SMCI.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(SMCI.Close ~ SMCI.Open + SMCI.High + SMCI.Low + SMCI.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$SMCI.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$SMCI.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$SMCI.Close - mean(test$SMCI.Close))^2)
+ss_residual <- sum((test$SMCI.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = SMCI.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for Super Micro Computer, Inc. with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for Taiwan Semiconductor Manufacturing Company Limited
+ticker <- "TSM"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$TSM.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(TSM.Close ~ TSM.Open + TSM.High + TSM.Low + TSM.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$TSM.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$TSM.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$TSM.Close - mean(test$TSM.Close))^2)
+ss_residual <- sum((test$TSM.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = TSM.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for Taiwan Semiconductor Manufacturing Company Limited with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+
+```{r}
+# Load necessary libraries
+library(quantmod)
+library(ggplot2)
+library(TTR)
+
+# Set the ticker symbol for Tyler Technologies
+ticker <- "TYL"
+
+# Fetch data using the getSymbols function
+getSymbols(ticker, src = "yahoo")
+
+# Convert the fetched data to a dataframe
+df <- as.data.frame(get(ticker))
+
+# Convert Date column to datetime format
+df$Date <- as.Date(row.names(df))
+
+# Calculate 20-day EMA
+df$EMA_20 <- EMA(df$TYL.Close, n = 20)
+
+# Split data into train and test sets
+train <- df[df$Date < as.Date("2020-01-01"), ]
+test <- df[df$Date >= as.Date("2020-01-01"), ]
+
+# Train linear regression model
+lm_model <- lm(TYL.Close ~ TYL.Open + TYL.High + TYL.Low + TYL.Volume, data = train)
+
+# Make predictions
+predictions <- predict(lm_model, test)
+
+# Evaluate model performance
+mse <- mean((predictions - test$TYL.Close)^2)
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mean(abs(predictions - test$TYL.Close))
+cat("Mean Absolute Error (MAE):", mae, "\n")
+
+# Calculate R-squared (R^2)
+ss_total <- sum((test$TYL.Close - mean(test$TYL.Close))^2)
+ss_residual <- sum((test$TYL.Close - predictions)^2)
+rsquared <- 1 - (ss_residual / ss_total)
+cat("R-squared (R^2):", rsquared, "\n")
+
+# Summary of linear regression model
+summary(lm_model)
+
+# Plot actual and predicted Close prices with 20-day EMA
+ggplot() +
+  geom_line(data = test, aes(x = Date, y = TYL.Close, color = "Actual")) +
+  geom_line(data = test, aes(x = Date, y = predictions, color = "Predicted")) +
+  geom_line(data = test, aes(x = Date, y = EMA_20, color = "EMA_20"), linetype = "dashed") +
+  ggtitle("Actual vs. Predicted Close Prices for Tyler Technologies with 20-day EMA") +
+  xlab("Date") +
+  ylab("Close Price") +
+  scale_color_manual(name = "Legend", values = c("Actual" = "blue", "Predicted" = "red", "EMA_20" = "green")) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
